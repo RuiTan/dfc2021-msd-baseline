@@ -43,6 +43,7 @@ parser.add_argument('--gpu', type=int, default=0, help='The ID of the GPU to use
 parser.add_argument('--batch_size', type=int, default=32, help='Batch size to use for training')
 parser.add_argument('--num_epochs', type=int, default=50, help='Number of epochs to train for')
 parser.add_argument('--seed', type=int, default=0, help='Random seed to pass to numpy and torch')
+parser.add_argument('--batch_norm', type=bool, default=False, help='The input will be normalized if set `True`')
 args = parser.parse_args()
 
 def image_transforms(img, group):
@@ -129,6 +130,10 @@ def main():
         model = models.get_unet()
     elif args.model == "fcn":
         model = models.get_fcn()
+    elif args.model == 'deeplabv3p':
+        model = models.get_deeplabv3p()
+    elif args.model == 'unetpp':
+        model = models.get_unetpp()
     else:
         raise ValueError("Invalid model")
 

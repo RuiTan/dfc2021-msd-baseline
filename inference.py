@@ -82,6 +82,10 @@ def main():
         model = models.get_unet()
     elif args.model == "fcn":
         model = models.get_fcn()
+    elif args.model == "deeplabv3p":
+        model = models.get_deeplabv3p()
+    elif args.model == 'unetpp':
+        model = models.get_unetpp()
     else:
         raise ValueError("Invalid model")
     model.load_state_dict(torch.load(args.model_fn))

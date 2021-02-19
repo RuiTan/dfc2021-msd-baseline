@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteMappingsManager">
+    <list>
+      <list>
+        <remote-mappings server-id="python@sftp://tanrui@corp.sse.tongji.edu.cn@gpu03:22/home/tanrui@corp.sse.tongji.edu.cn/.conda/envs/dfc2021/bin/python">
+          <settings>
+            <list>
+              <mapping local-root="$PROJECT_DIR$" remote-root="/home/tanrui@corp.sse.tongji.edu.cn/tanrui/ieeecomp/methods/dfc2021-msd-baseline" />
+            </list>
+          </settings>
+        </remote-mappings>
+      </list>
+    </list>
+  </component>
+</project>
