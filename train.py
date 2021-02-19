@@ -33,7 +33,9 @@ parser.add_argument('--save_most_recent', action="store_true",  help='Flag for s
 parser.add_argument('--model', default='unet',
     choices=(
         'unet',
-        'fcn'
+        'fcn',
+        'deeplabv3p',
+        'unetpp'
     ),
     help='Model to use'
 )
