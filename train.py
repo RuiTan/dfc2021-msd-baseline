@@ -76,6 +76,7 @@ def label_transforms(labels, group):
     else:
         labels = utils.NLCD_CLASS_TO_IDX_MAP[labels]
     labels = torch.from_numpy(labels)
+    labels = labels.type(torch.LongTensor)
     return labels
 
 
