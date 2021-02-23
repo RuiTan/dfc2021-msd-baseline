@@ -35,19 +35,19 @@ class FCN(nn.Module):
 def get_unet():
     return smp.Unet(
         encoder_name='resnet18', encoder_depth=3, encoder_weights=None,
-        decoder_channels=(128, 64, 64), in_channels=4, classes=len(utils.NLCD_CLASSES)
+        decoder_channels=(128, 64, 64), in_channels=4, classes=utils.NLCD_CLASSES_COUNT
     )
 
 def get_fcn():
-    return FCN(num_input_channels=4, num_output_classes=len(utils.NLCD_CLASSES), num_filters=64)
+    return FCN(num_input_channels=4, num_output_classes=utils.NLCD_CLASSES_COUNT, num_filters=64)
 
 def get_deeplabv3p():
     return smp.DeepLabV3Plus(encoder_name='resnet34', encoder_depth=5, encoder_weights=None,
                 encoder_output_stride=16, decoder_channels=256, decoder_atrous_rates=(12, 24, 36),
-                in_channels=4, classes=len(utils.NLCD_CLASSES), activation=None, upsampling=4, aux_params=None)
+                in_channels=4, classes=utils.NLCD_CLASSES_COUNT, activation=None, upsampling=4, aux_params=None)
 
 def get_unetpp():
     return smp.UnetPlusPlus(encoder_name='resnet34', encoder_depth=5, encoder_weights=None,
                             decoder_use_batchnorm=True, decoder_channels=(256, 128, 64, 32, 16),
                             decoder_attention_type=None, in_channels=4,
-                            classes=len(utils.NLCD_CLASSES), activation=None, aux_params=None)
+                            classes=utils.NLCD_CLASSES_COUNT, activation=None, aux_params=None)
