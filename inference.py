@@ -41,6 +41,7 @@ parser.add_argument('--model', default='unet',
     ),
     help='Model to use'
 )
+parser.add_argument('--class_transfer', type=bool, default=False)
 
 
 args = parser.parse_args()
@@ -138,7 +139,7 @@ def main():
         # Run model and organize output
         #-------------------
 
-        output = np.zeros((len(utils.NLCD_CLASSES), input_height, input_width), dtype=np.float32)
+        output = np.zeros((utils.NLCD_CLASSES_COUNT, input_height, input_width), dtype=np.float32)
         kernel = np.ones((CHIP_SIZE, CHIP_SIZE), dtype=np.float32)
         kernel[HALF_PADDING:-HALF_PADDING, HALF_PADDING:-HALF_PADDING] = 5
         counts = np.zeros((input_height, input_width), dtype=np.float32)
@@ -173,7 +174,10 @@ def main():
 
         with rasterio.open(output_fn, "w", **output_profile) as f:
             f.write(output_hard, 1)
-            f.write_colormap(1, utils.NLCD_IDX_COLORMAP)
+            if args.class_transfer:
+                f.write_colormap(1, utils.NLCD_IDX_COLORMAP_TRANSFER)
+            else:
+                f.write_colormap(1, utils.NLCD_IDX_COLORMAP)
 
 
         if args.save_soft:

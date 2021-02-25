@@ -11,9 +11,9 @@ def tif_to_rgb(image_path, input_path, output_path):
         image = np.concatenate((R,G,B), axis=-1)
         cv2.imwrite(os.path.join(output_path, image_path), image)
 
-if __name__ == '__main__':
+def visualize_tif(image_id):
     input_path = '/archive/cold0/tanrui/IEEEData'
-    image_id = '1950'
+    image_id = str(image_id)
     image_naip_2013 = image_id + '_naip-2013.tif'
     image_naip_2017 = image_id + '_naip-2017.tif'
     out_path = '/home/tanrui@corp.sse.tongji.edu.cn/tanrui/ieeecomp/methods/dfc2021-msd-baseline/results/naip_rgb'

@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 
 from dataloaders.StreamingDatasets import StreamingGeospatialDataset
-
+from change_intensity import *
 import torch
 
 torch.backends.cudnn.deterministic = False
@@ -54,14 +54,30 @@ parser.add_argument('--batch_size', type=int, default=32, help='Batch size to us
 parser.add_argument('--num_epochs', type=int, default=50, help='Number of epochs to train for')
 parser.add_argument('--seed', type=int, default=0, help='Random seed to pass to numpy and torch')
 parser.add_argument('--batch_norm', type=bool, default=False, help='The input will be normalized if set `True`')
+parser.add_argument('--input_with_ndvi_ndwi', type=bool, default=False)
 args = parser.parse_args()
 
 
 def image_transforms(img, group):
+    mean_2013 = utils.NAIP_2013_MEANS.copy()
+    mean_2017 = utils.NAIP_2017_MEANS.copy()
+    stds_2013 = utils.NAIP_2013_STDS.copy()
+    stds_2017 = utils.NAIP_2017_STDS.copy()
+    if args.input_with_ndvi_ndwi:
+        R = img[:, :, 0].astype(np.float)
+        G = img[:, :, 1].astype(np.float)
+        NIR = img[:, :, 3].astype(np.float)
+        NDVI = ((NIR-R)/(NIR+R))
+        NDWI = ((G-NIR)/(G+NIR))
+        img = np.concatenate((img, np.expand_dims(NDVI, axis=2), np.expand_dims(NDWI, axis=2)), axis=2)
+        mean_2013 = np.concatenate((mean_2013, [0, 0]))
+        mean_2017 = np.concatenate((mean_2017, [0, 0]))
+        stds_2013 = np.concatenate((stds_2013, [1, 1]))
+        stds_2017 = np.concatenate((stds_2017, [1, 1]))
     if group == 0:
-        img = (img - utils.NAIP_2013_MEANS) / utils.NAIP_2013_STDS
+        img = (img - mean_2013) / stds_2013
     elif group == 1:
-        img = (img - utils.NAIP_2017_MEANS) / utils.NAIP_2017_STDS
+        img = (img - mean_2017) / stds_2017
     else:
         raise ValueError("group not recognized")
     img = np.rollaxis(img, 2, 0).astype(np.float32)
@@ -148,7 +164,10 @@ def main():
     if args.model == "unet":
         model = models.get_unet()
     elif args.model == "fcn":
-        model = models.get_fcn()
+        if args.input_with_ndvi_ndwi:
+            model = models.get_fcn(6)
+        else:
+            model = models.get_fcn()
     elif args.model == 'deeplabv3p':
         model = models.get_deeplabv3p()
     elif args.model == 'unetpp':

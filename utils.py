@@ -14,8 +14,11 @@ NAIP_2017_MEANS = np.array([72.84, 86.83, 76.78, 130.82])
 NAIP_2017_STDS = np.array([41.78, 34.66, 28.76, 58.95])
 NLCD_CLASSES = [0, 11, 12, 21, 22, 23, 24, 31, 41, 42, 43, 52, 71, 81, 82, 90,
                 95]  # 16 classes + 1 nodata class ("0"). Note that "12" is "Perennial Ice/Snow" and is not present in Maryland.
+NLCD_CLASSES_TARGET = [0, 1, 2, 3, 4, 5, 6]
 NLCD_CLASSES_TRANSFER = [4, 0, 4, 5, 6, 3, 3, 2, 1, 1, 1, 1, 2, 2, 2, 1, 1]
-NLCD_CLASSES_COUNT = 7
+NLCD_CLASSES_COUNT = 17
+
+NVDI_threshold = [0.11, 0.77]
 
 NLCD_CLASS_COLORMAP = {  # Copied from the emebedded color table in the NLCD data files
     0: (0, 0, 0, 255),
@@ -37,11 +40,34 @@ NLCD_CLASS_COLORMAP = {  # Copied from the emebedded color table in the NLCD dat
     95: (108, 159, 184, 255)
 }
 
+NLCD_CLASSES_TRANSFER_COLORMAP = {
+    0: (0, 0, 0, 255),
+    1: (70, 107, 159, 255),
+    2: (209, 222, 248, 255),
+    3: (222, 197, 197, 255),
+    4: (217, 146, 130, 255),
+    5: (235, 0, 0, 255),
+    6: (104, 171, 95, 255)
+}
+
 NLCD_IDX_COLORMAP = {
     idx: NLCD_CLASS_COLORMAP[c]
     for idx, c in enumerate(NLCD_CLASSES)
 }
 
+NLCD_IDX_COLORMAP_TRANSFER = {
+    idx: NLCD_CLASSES_TRANSFER_COLORMAP[c]
+    for idx, c in enumerate(NLCD_CLASSES_TARGET)
+}
+
+def get_ndvi_threshold_val():
+    ndvi_threshold_val = []
+    for i in NVDI_threshold:
+        ndvi_threshold_val.append(255.0*(i+1.0)/2.0)
+    return ndvi_threshold_val
+
+
+NVDI_threshold_val = get_ndvi_threshold_val()
 
 def get_nlcd_class_to_idx_map():
     nlcd_label_to_idx_map = []

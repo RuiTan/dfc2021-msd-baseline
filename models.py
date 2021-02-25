@@ -38,8 +38,8 @@ def get_unet():
         decoder_channels=(128, 64, 64), in_channels=4, classes=utils.NLCD_CLASSES_COUNT
     )
 
-def get_fcn():
-    return FCN(num_input_channels=4, num_output_classes=utils.NLCD_CLASSES_COUNT, num_filters=64)
+def get_fcn(num_input_channels=4):
+    return FCN(num_input_channels=num_input_channels, num_output_classes=utils.NLCD_CLASSES_COUNT, num_filters=64)
 
 def get_deeplabv3p():
     return smp.DeepLabV3Plus(encoder_name='resnet34', encoder_depth=5, encoder_weights=None,
